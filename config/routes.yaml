@@ -1,3 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+app_uri_edit:
+  path: /uri/edit
+  controller: \App\Controller\UriController::edit
+
+app_uri_view:
+  path: /uri/{hash}
+  controller: \App\Controller\UriController::view
+  requirements:
+    hash: '\w{8}'
