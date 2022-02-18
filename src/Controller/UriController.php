@@ -2,15 +2,20 @@
 
 namespace App\Controller;
 
+use App\Repository\UriRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UriController extends AbstractController
 {
-    public function view(string $hash): Response
+    public function view(string $hash, UriRepository $repository): Response
     {
-        throw new NotFoundHttpException();//<-- Warn: for dev environment trace is shown
+        $uri = $repository->findOneBy(['hash' => $hash]);
+        if (!$uri) {
+            throw new NotFoundHttpException('URI not found');//<-- Warn: for dev environment trace is shown
+        }
+
         //TODO check exists -> 404
         //TODO check redirects -> 404
         //TODO check expired -> 404
