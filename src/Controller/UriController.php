@@ -44,10 +44,9 @@ class UriController extends AbstractController
         $form = $this->createForm(UriForm::class, $uri);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //TODO generate and set hash
-            $hash = '12345678';
+            $hash = $this->generateHash($uri->getUri());
             $uri->setHash($hash);
-            //dd($uri);
+
             $manager = $registry->getManager();
             $manager->persist($uri);
             $manager->flush();
@@ -63,5 +62,13 @@ class UriController extends AbstractController
     public function success(): Response
     {
         return $this->render('uri/success.html.twig');
+    }
+
+    private function generateHash(string $uri, int $length = 8): string
+    {
+        $hash = base64_encode(hash('sha256', $uri, true));
+        $hash = strtr($hash, '+/', '-_');
+        $hash = rtrim($hash, '=');
+        return substr($hash, 0, $length);
     }
 }
