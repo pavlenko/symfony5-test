@@ -28,6 +28,16 @@ class Uri
     private $hash;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxRedirects;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numRedirects;
+
+    /**
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
@@ -50,7 +60,6 @@ class Uri
     public function setUri(string $uri): self
     {
         $this->uri = $uri;
-
         return $this;
     }
 
@@ -62,7 +71,28 @@ class Uri
     public function setHash(string $hash): self
     {
         $this->hash = $hash;
+        return $this;
+    }
 
+    public function getMaxRedirects(): ?int
+    {
+        return $this->maxRedirects;
+    }
+
+    public function setMaxRedirects(int $maxRedirects): self
+    {
+        $this->maxRedirects = $maxRedirects;
+        return $this;
+    }
+
+    public function getNumRedirects(): ?int
+    {
+        return $this->numRedirects;
+    }
+
+    public function setNumRedirects(int $numRedirects): self
+    {
+        $this->numRedirects = $numRedirects;
         return $this;
     }
 
@@ -74,7 +104,6 @@ class Uri
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -86,7 +115,6 @@ class Uri
     public function setExpiredAt(\DateTimeImmutable $expiredAt): self
     {
         $this->expiredAt = $expiredAt;
-
         return $this;
     }
 }

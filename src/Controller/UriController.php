@@ -2,25 +2,34 @@
 
 namespace App\Controller;
 
-use App\Repository\UriRepository;
+use App\Entity\Uri;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UriController extends AbstractController
 {
-    public function view(string $hash, UriRepository $repository): Response
+    public function view(string $hash, ManagerRegistry $registry): Response
     {
-        $uri = $repository->findOneBy(['hash' => $hash]);
+        $manager = $registry->getManager();
+        $uri = $manager->getRepository(Uri::class)->findOneBy(['hash' => $hash]);
         if (!$uri) {
             throw new NotFoundHttpException('URI not found');//<-- Warn: for dev environment trace is shown
         }
+        if ($uri->getMaxRedirects() > 0 && $uri->getMaxRedirects() <= $uri->getNumRedirects()) {
+            throw new NotFoundHttpException('URI not found');
+        }
+        if ($uri->getExpiredAt() < new \DateTimeImmutable()) {
+            throw new NotFoundHttpException('URI not found');
+        }
 
-        //TODO check exists -> 404
-        //TODO check redirects -> 404
-        //TODO check expired -> 404
-        //TODO redirect
-        return new Response('VIEW');
+        $uri->setNumRedirects($uri->getNumRedirects() + 1);
+
+        $manager->persist($uri);
+        $manager->flush();
+
+        return $this->redirect($uri->getUri());
     }
 
     public function edit(): Response
