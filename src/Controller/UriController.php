@@ -6,6 +6,7 @@ use App\Entity\Uri;
 use App\Form\UriForm;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,7 +23,7 @@ class UriController extends AbstractController
         if ($uri->getMaxRedirects() > 0 && $uri->getMaxRedirects() <= $uri->getNumRedirects()) {
             throw new NotFoundHttpException('URI not found');
         }
-        if ($uri->getExpiredAt() < new \DateTimeImmutable()) {
+        if ($uri->getExpiredAt() < new \DateTime()) {
             throw new NotFoundHttpException('URI not found');
         }
 
@@ -34,16 +35,19 @@ class UriController extends AbstractController
         return $this->redirect($uri->getUri());
     }
 
-    public function edit(ManagerRegistry $registry, UrlGeneratorInterface $urlGenerator): Response
+    public function edit(Request $request, ManagerRegistry $registry, UrlGeneratorInterface $urlGenerator): Response
     {
         $uri = new Uri();
+        $uri->setCreatedAt(new \DateTime());
+        $uri->setNumRedirects(0);
 
         $form = $this->createForm(UriForm::class, $uri);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //TODO generate and set hash
-            $hash = '123456';
+            $hash = '12345678';
             $uri->setHash($hash);
-
+            //dd($uri);
             $manager = $registry->getManager();
             $manager->persist($uri);
             $manager->flush();

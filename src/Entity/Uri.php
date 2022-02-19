@@ -28,22 +28,22 @@ class Uri
     private $hash;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
-    private $maxRedirects;
+    private $maxRedirects = 0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
-    private $numRedirects;
+    private $numRedirects = 0;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $expiredAt;
 
@@ -96,23 +96,23 @@ class Uri
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getExpiredAt(): ?\DateTimeImmutable
+    public function getExpiredAt(): ?\DateTime
     {
         return $this->expiredAt;
     }
 
-    public function setExpiredAt(\DateTimeImmutable $expiredAt): self
+    public function setExpiredAt(\DateTime $expiredAt): self
     {
         $this->expiredAt = $expiredAt;
         return $this;
