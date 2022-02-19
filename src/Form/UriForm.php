@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,7 @@ class UriForm extends AbstractType
         $builder
             ->add('uri', UrlType::class)
             ->add('maxRedirects', IntegerType::class)
+            ->add('expiredAt', DateTimeType::class)
         ;
     }
 

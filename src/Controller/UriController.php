@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Uri;
 use App\Form\UriForm;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UriController extends AbstractController
 {
@@ -34,7 +34,7 @@ class UriController extends AbstractController
         return $this->redirect($uri->getUri());
     }
 
-    public function edit(ManagerRegistry $registry, UrlGenerator $urlGenerator): Response
+    public function edit(ManagerRegistry $registry, UrlGeneratorInterface $urlGenerator): Response
     {
         $uri = new Uri();
 
@@ -53,6 +53,11 @@ class UriController extends AbstractController
             return $this->redirectToRoute('app_uri_success');
         }
 
-        return $this->render('uri/edit.html.twig', ['form' => $form]);
+        return $this->render('uri/edit.html.twig', ['form' => $form->createView()]);
+    }
+
+    public function success(): Response
+    {
+        return $this->render('uri/success.html.twig');
     }
 }

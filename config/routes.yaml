@@ -6,6 +6,10 @@ app_uri_edit:
   path: /uri/edit
   controller: \App\Controller\UriController::edit
 
+app_uri_success:
+  path: /uri/success
+  controller: \App\Controller\UriController::success
+
 app_uri_view:
   path: /uri/{hash}
   controller: \App\Controller\UriController::view
